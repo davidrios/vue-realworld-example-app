@@ -22,7 +22,7 @@
             exact
             :to="{ name: 'login' }"
           >
-            <i class="ion-compose"></i>Sign in
+            <i class="ion-compose"></i>{{ $t("generic-sign-in") }}
           </router-link>
         </li>
         <li class="nav-item">
