@@ -32,7 +32,7 @@
             exact
             :to="{ name: 'register' }"
           >
-            <i class="ion-compose"></i>Sign up
+            <i class="ion-compose"></i>{{ $t("generic-sign-up") }}
           </router-link>
         </li>
       </ul>

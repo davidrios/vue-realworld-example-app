@@ -12,15 +12,21 @@
 # for the submit button
 generic-sign-in = Sign-in
 
+generic-sign-up = Sign up
+
 
 ## Backend errors
 
 error__email-or-password__is-invalid = Email or password invalid
 
 
-## Stuff from the login page
+## Login and register pages
 
 need-an-account = Need an account?
+
+have-an-account = Have an account?
+
+username-placeholder = Username
 
 email-placeholder = Email
 
