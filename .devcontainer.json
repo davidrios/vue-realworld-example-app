@@ -1,0 +1,12 @@
+{
+  "name": "vue-realworld-ea",
+  "dockerComposeFile": "docker-compose.yaml",
+  "service": "frontend",
+  "workspaceFolder": "/code/frontend",
+  "shutdownAction": "none",
+  "remoteUser": "user",
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "octref.vetur"
+  ]
+}
