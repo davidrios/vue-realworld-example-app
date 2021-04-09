@@ -12,7 +12,7 @@
             exact
             :to="{ name: 'home' }"
           >
-            Home
+            {{ $t("home-link") }}
           </router-link>
         </li>
         <li class="nav-item">
@@ -44,7 +44,7 @@
             exact
             :to="{ name: 'home' }"
           >
-            Home
+            {{ $t("home-link") }}
           </router-link>
         </li>
         <li class="nav-item">
@@ -53,7 +53,7 @@
             active-class="active"
             :to="{ name: 'article-edit' }"
           >
-            <i class="ion-compose"></i>&nbsp;New Article
+            <i class="ion-compose"></i>&nbsp;{{ $t("new-article-action") }}
           </router-link>
         </li>
         <li class="nav-item">
@@ -63,7 +63,7 @@
             exact
             :to="{ name: 'settings' }"
           >
-            <i class="ion-gear-a"></i>&nbsp;Settings
+            <i class="ion-gear-a"></i>&nbsp;{{ $t("settings") }}
           </router-link>
         </li>
         <li class="nav-item" v-if="currentUser.username">

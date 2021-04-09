@@ -4,6 +4,7 @@
 ## General terms
 
 app-name = conduit
+app-slogan = A place to share your knowledge.
 
 company-name = Thinkster
 company-website = https://thinkster.io
@@ -18,15 +19,28 @@ generic-sign-in = Sign-in
 generic-sign-up = Sign up
 
 
+## Header
+
+# Text for the links to the home page
+home-link = Home
+
+# Text for the link to create a new article
+new-article-action = New Article
+
+settings = Settings
+
+
 ## Footer
 
 footer-text =
   An interactive learning project from {$linkToCompany}. Code & design licensed under MIT.
 
 
-## Backend errors
+## Home
 
-error__email-or-password__is-invalid = Email or password invalid
+your-feed = Your Feed
+global-feed = Global Feed
+popular-tags = Popular Tags
 
 
 ## Login and register pages
@@ -35,8 +49,16 @@ need-an-account = Need an account?
 
 have-an-account = Have an account?
 
-username-placeholder = Username
+username-input =
+  .placeholder = Username
 
-email-placeholder = Email
+email-input =
+  .placeholder = Email
 
-password-placeholder = Password
+password-input =
+  .placeholder = Password
+
+
+## Backend errors
+
+error__email-or-password__is-invalid = Email or password invalid

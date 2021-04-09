@@ -18,7 +18,7 @@
                 class="form-control form-control-lg"
                 type="text"
                 v-model="username"
-                :placeholder="$t('username-placeholder')"
+                v-bind="$ta('username-input')"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -26,7 +26,7 @@
                 class="form-control form-control-lg"
                 type="text"
                 v-model="email"
-                :placeholder="$t('email-placeholder')"
+                v-bind="$ta('email-input')"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -34,7 +34,7 @@
                 class="form-control form-control-lg"
                 type="password"
                 v-model="password"
-                :placeholder="$t('password-placeholder')"
+                v-bind="$ta('password-input')"
               />
             </fieldset>
             <button class="btn btn-lg btn-primary pull-xs-right">
