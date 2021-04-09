@@ -3,7 +3,10 @@
 
 ## General terms
 
--app-name = conduit
+app-name = conduit
+
+company-name = Thinkster
+company-website = https://thinkster.io
 
 
 ## Generic content
@@ -13,6 +16,12 @@
 generic-sign-in = Sign-in
 
 generic-sign-up = Sign up
+
+
+## Footer
+
+footer-text =
+  An interactive learning project from {$linkToCompany}. Code & design licensed under MIT.
 
 
 ## Backend errors
