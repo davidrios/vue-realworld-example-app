@@ -17,7 +17,7 @@
     <rwv-article-actions
       v-if="actions"
       :article="article"
-      :canModify="isCurrentUser()"
+      :can-modify="isCurrentUser()"
     ></rwv-article-actions>
     <button
       v-else

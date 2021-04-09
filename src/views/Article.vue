@@ -14,7 +14,7 @@
             <li v-for="(tag, index) of article.tagList" :key="tag + index">
               <RwvTag
                 :name="tag"
-                className="tag-default tag-pill tag-outline"
+                class-name="tag-default tag-pill tag-outline"
               ></RwvTag>
             </li>
           </ul>
@@ -29,7 +29,7 @@
           <RwvCommentEditor
             v-if="isAuthenticated"
             :slug="slug"
-            :userImage="currentUser.image"
+            :user-image="currentUser.image"
           >
           </RwvCommentEditor>
           <p v-else>
@@ -62,7 +62,7 @@ import RwvTag from "@/components/VTag";
 import { FETCH_ARTICLE, FETCH_COMMENTS } from "@/store/actions.type";
 
 export default {
-  name: "rwv-article",
+  name: "RwvArticle",
   props: {
     slug: {
       type: String,
