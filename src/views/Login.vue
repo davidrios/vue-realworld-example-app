@@ -6,11 +6,13 @@
           <h1 class="text-xs-center">{{ $t("generic-sign-in") }}</h1>
           <p class="text-xs-center">
             <router-link :to="{ name: 'register' }">
-              Need an account?
+              {{ $t("need-an-account") }}
             </router-link>
           </p>
           <ul v-if="errors" class="error-messages">
-            <li v-for="(v, k) in errors" :key="k">{{ k }} {{ v | error }}</li>
+            <li v-for="(v, k) in errors" :key="k">
+              {{ translateError(k, v) }}
+            </li>
           </ul>
           <form @submit.prevent="onSubmit(email, password)">
             <fieldset class="form-group">
@@ -18,7 +20,7 @@
                 class="form-control form-control-lg"
                 type="text"
                 v-model="email"
-                placeholder="Email"
+                :placeholder="$t('email-placeholder')"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -26,7 +28,7 @@
                 class="form-control form-control-lg"
                 type="password"
                 v-model="password"
-                placeholder="Password"
+                :placeholder="$t('password-placeholder')"
               />
             </fieldset>
             <button class="btn btn-lg btn-primary pull-xs-right">
@@ -42,6 +44,7 @@
 <script>
 import { mapState } from "vuex";
 import { LOGIN } from "@/store/actions.type";
+import { convertErrorToKey } from "../common/utils";
 
 export default {
   name: "RwvLogin",
@@ -56,6 +59,9 @@ export default {
       this.$store
         .dispatch(LOGIN, { email, password })
         .then(() => this.$router.push({ name: "home" }));
+    },
+    translateError(key, value) {
+      return this.$t(convertErrorToKey(key, value));
     }
   },
   computed: {
