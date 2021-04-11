@@ -33,10 +33,18 @@
           >
           </RwvCommentEditor>
           <p v-else>
-            <router-link :to="{ name: 'login' }">Sign in</router-link>
-            or
-            <router-link :to="{ name: 'register' }">sign up</router-link>
-            to add comments on this article.
+            <i18n path="sign-in-up-to-add-comments" use-ta tag="p">
+              <template #signInLink="{ signInLabel }">
+                <router-link :to="{ name: 'login' }">{{
+                  signInLabel
+                }}</router-link>
+              </template>
+              <template #signUpLink="{ signUpLabel }">
+                <router-link :to="{ name: 'register' }">{{
+                  signUpLabel
+                }}</router-link>
+              </template>
+            </i18n>
           </p>
           <RwvComment
             v-for="(comment, index) in comments"

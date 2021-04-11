@@ -27,6 +27,7 @@ home-link = Home
 # Text for the link to create a new article
 new-article-action = New Article
 
+# Link to settings page
 settings = Settings
 
 
@@ -34,6 +35,8 @@ settings = Settings
 
 footer-text =
   An interactive learning project from {$linkToCompany}. Code & design licensed under MIT.
+  .companyName = {company-name}
+  .companyWebsite = {company-website}
 
 
 ## Home
@@ -57,6 +60,16 @@ email-input =
 
 password-input =
   .placeholder = Password
+
+
+## Article stuff
+
+# The two parameters will be replaced with links and each link
+# will use the .sign-*-label as its text
+sign-in-up-to-add-comments =
+  {$signInLink} or {$signUpLink} to add comments on this article.
+  .signInLabel = Sign in
+  .signUpLabel = sign up
 
 
 ## Backend errors
