@@ -3,18 +3,19 @@ import { negotiateLanguages } from "@fluent/langneg";
 import { createFluentVue } from "fluent-vue";
 
 const DEFAULT_LOCALE = "en-US";
-const SUPPORTED_LOCALES = ["en-US", "pt-BR"];
+const SUPPORTED_LOCALES = ["en-US", "pt-BR", "pt"];
+const MAX_LANGUAGES = 1;
 
-function getDesiredLocales(maxLanguages) {
-  const desired = negotiateLanguages(navigator.languages, SUPPORTED_LOCALES, {
+function getLocalesToLoad(desiredLocales) {
+  const negotiated = negotiateLanguages(desiredLocales, SUPPORTED_LOCALES, {
     defaultLocale: DEFAULT_LOCALE,
-    strategy: "matching"
+    strategy: "filtering"
   });
 
-  const allowed = [];
+  const toLoad = [];
   let previous = null;
   let count = -1;
-  for (const locale of desired) {
+  for (const locale of negotiated) {
     const lang = locale.substr(0, 2);
 
     if (previous != lang) {
@@ -22,18 +23,18 @@ function getDesiredLocales(maxLanguages) {
       count += 1;
     }
 
-    if (count >= maxLanguages) {
+    if (count >= MAX_LANGUAGES) {
       break;
     }
 
-    allowed.push(locale);
+    toLoad.push(locale);
   }
 
-  if (!allowed.includes(DEFAULT_LOCALE)) {
-    allowed.push(DEFAULT_LOCALE);
+  if (!toLoad.includes(DEFAULT_LOCALE)) {
+    toLoad.push(DEFAULT_LOCALE);
   }
 
-  return allowed;
+  return toLoad;
 }
 
 async function loadCatalog(locale, catalogName) {
@@ -48,28 +49,64 @@ async function loadCatalog(locale, catalogName) {
   }
 }
 
-async function loadAndCreateFluentVue(maxLanguages = 1) {
-  return Promise.all(
-    getDesiredLocales(maxLanguages).map(locale =>
-      loadCatalog(locale, "global").then(data => ({ locale, data }))
+async function loadAndCreateBundles(locales, catalog = "global") {
+  const catalogsData = await Promise.all(
+    locales.map(locale =>
+      loadCatalog(locale, catalog).then(data => ({ locale, data }))
     )
-  ).then(catalogsData => {
-    const bundles = catalogsData.map(({ locale, data }) => {
-      const bundle = new FluentBundle(locale);
-      const errors = bundle.addResource(new FluentResource(data));
+  );
 
-      if (errors.length > 0) {
-        console.warn(`Errors loading fluent resource ${locale}/global`, errors);
-      }
+  return catalogsData.map(({ locale, data }) => {
+    const bundle = new FluentBundle(locale);
+    const errors = bundle.addResource(new FluentResource(data));
 
-      return bundle;
-    });
+    if (errors.length > 0) {
+      console.warn(`Errors loading fluent resource ${locale}/global`, errors);
+    }
 
-    return createFluentVue({
-      locale: catalogsData.map(({ locale }) => locale),
-      bundles: bundles
-    });
+    return bundle;
   });
 }
 
-export { DEFAULT_LOCALE, SUPPORTED_LOCALES, loadAndCreateFluentVue };
+async function loadAndCreateFluentVue() {
+  let chosenLocale = localStorage.getItem("chosenLocale");
+  if (chosenLocale == null) {
+    chosenLocale = navigator.languages;
+  } else {
+    chosenLocale = [chosenLocale];
+  }
+  const locales = getLocalesToLoad(chosenLocale);
+  const bundles = await loadAndCreateBundles(locales);
+
+  return createFluentVue({
+    locale: locales,
+    bundles: bundles
+  });
+}
+
+function localePlugin(fluent) {
+  return {
+    install(vue) {
+      vue.prototype.$locale = {
+        get current() {
+          return fluent.locale[0];
+        },
+        set current(newLocale) {
+          this.setCurrent(newLocale);
+        },
+        async setCurrent(newLocale) {
+          const locales = getLocalesToLoad([newLocale]);
+          const bundles = await loadAndCreateBundles(locales);
+          localStorage.setItem("chosenLocale", newLocale);
+          fluent.bundles = bundles;
+          fluent.locale = locales;
+        },
+        get supported() {
+          return SUPPORTED_LOCALES.slice();
+        }
+      };
+    }
+  };
+}
+
+export { loadAndCreateFluentVue, localePlugin };
