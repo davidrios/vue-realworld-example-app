@@ -20,5 +20,8 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true
     }
+  },
+  "[fluent]": {
+    "editor.tabSize": 4
   }
 }
