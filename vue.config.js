@@ -4,5 +4,6 @@ module.exports = {
       test: /\.ftl$/,
       use: ["@davidrios/hot-reloader", "file-loader"]
     });
-  }
+  },
+  publicPath: "vue-realworld-example-app"
 };
