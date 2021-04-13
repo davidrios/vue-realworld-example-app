@@ -176,6 +176,9 @@ function localePlugin(manager) {
         async setCurrent(newLocale) {
           return await manager.changeLocale(newLocale);
         },
+        async useCatalog(catalogName) {
+          return await manager.loadCatalog(catalogName);
+        },
         get supported() {
           return SUPPORTED_LOCALES.slice();
         }
