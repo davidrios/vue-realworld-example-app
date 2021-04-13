@@ -35,8 +35,8 @@ settings = Settings
 
 footer-text =
   An interactive learning project from {$linkToCompany}. Code & design licensed under MIT.
-  .companyName = {company-name}
-  .companyWebsite = {company-website}
+  .company-name = {company-name}
+  .company-website = {company-website}
 
 
 ## Home
@@ -68,8 +68,8 @@ password-input =
 # will use the .sign-*-label as its text
 sign-in-up-to-add-comments =
   {$signInLink} or {$signUpLink} to add comments on this article.
-  .signInLabel = Sign in
-  .signUpLabel = sign up
+  .sign-in-label = Sign in
+  .sign-up-label = sign up
 
 
 ## Backend errors
