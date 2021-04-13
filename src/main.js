@@ -9,10 +9,10 @@ import { CHECK_AUTH } from "./store/actions.type";
 import ApiService from "./common/api.service";
 import DateFilter from "./common/date.filter";
 import ErrorFilter from "./common/error.filter";
-import { loadAndCreateFluentVue, localePlugin } from "./common/fluent-utils";
+import { loadAndCreateFluentVue } from "./common/fluent-utils";
 
-loadAndCreateFluentVue().then(fluent => {
-  Vue.use(localePlugin(fluent));
+loadAndCreateFluentVue().then(({ fluent, localePlugin }) => {
+  Vue.use(localePlugin);
   Vue.use(fluent);
 
   Vue.config.productionTip = false;

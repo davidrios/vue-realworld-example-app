@@ -37,69 +37,144 @@ function getLocalesToLoad(desiredLocales) {
   return toLoad;
 }
 
-async function loadCatalog(locale, catalogName) {
-  try {
-    const { default: contents } = await import(
-      `../locales/${locale}/${catalogName}.ftl`
-    );
-    return contents;
-  } catch (err) {
-    console.warn(`Could not load catalog ${locale}/${catalogName}`);
-    return "";
-  }
-}
-
-async function loadAndCreateBundles(locales, catalog = "global") {
-  const catalogsData = await Promise.all(
-    locales.map(locale =>
-      loadCatalog(locale, catalog).then(data => ({ locale, data }))
-    )
-  );
-
-  return catalogsData.map(({ locale, data }) => {
-    const bundle = new FluentBundle(locale);
-    const errors = bundle.addResource(new FluentResource(data));
-
-    if (errors.length > 0) {
-      console.warn(`Errors loading fluent resource ${locale}/global`, errors);
+class FluentManager {
+  constructor(storageName = "default") {
+    let chosenLocale = localStorage.getItem(`fluentManager.${storageName}`);
+    if (chosenLocale == null) {
+      chosenLocale = navigator.languages;
+    } else {
+      chosenLocale = [chosenLocale];
     }
 
-    return bundle;
-  });
+    this.storageName = storageName;
+    this.locales = getLocalesToLoad(chosenLocale);
+    this.fluent = createFluentVue({ locale: this.locales });
+    this.plugin = localePlugin(this);
+    this.loadedCatalogs = {};
+  }
+
+  get currentLocale() {
+    return this.fluent.locale[0];
+  }
+
+  async init(catalog = "global") {
+    return await this.loadCatalog(catalog);
+  }
+
+  async loadCatalog(catalog, refresh = true) {
+    if (this.loadedCatalogs[catalog] == null) {
+      this.loadedCatalogs[catalog] = {};
+    }
+
+    await Promise.all(
+      this.locales.map(async locale => {
+        let res = null;
+
+        try {
+          res = (await import(`@/locales/${locale}/${catalog}.ftl`)).default;
+        } catch (err) {
+          console.warn(`Could not load catalog ${locale}/${catalog}`);
+          return;
+        }
+
+        if (res == null) {
+          return;
+        }
+
+        const callback = async (url, refresh = true) => {
+          if (this.loadedCatalogs[catalog][locale] == null || refresh) {
+            const req = await fetch(url);
+
+            if (req.ok) {
+              this.loadedCatalogs[catalog][locale] = await req.text();
+            }
+          }
+
+          if (refresh) {
+            this.refresh();
+          }
+        };
+
+        res.register(callback);
+        await callback(res.content, false);
+      })
+    );
+
+    if (refresh) {
+      this.refresh();
+    }
+  }
+
+  async changeLocale(newLocale) {
+    this.locales = getLocalesToLoad([newLocale]);
+    await this.loadAllCatalogs();
+    localStorage.setItem(`fluentManager.${this.storageName}`, newLocale);
+  }
+
+  async loadAllCatalogs() {
+    await Promise.all(
+      Object.keys(this.loadedCatalogs).map(async catalog => {
+        await this.loadCatalog(catalog, false);
+      })
+    );
+
+    this.refresh();
+  }
+
+  refresh() {
+    const bundles = [];
+    const catalogs = [];
+
+    for (const locale of this.locales) {
+      const data = [];
+
+      for (const catalog in this.loadedCatalogs) {
+        data.push(this.loadedCatalogs[catalog][locale]);
+        catalogs.push(catalog);
+      }
+
+      const bundle = new FluentBundle(locale);
+      const errors = bundle.addResource(new FluentResource(data.join("\n")));
+
+      bundles.push(bundle);
+
+      if (errors.length > 0) {
+        console.warn(
+          `Errors loading fluent resource ${locale} with catalogs ${catalogs.join(
+            ", "
+          )}`,
+          errors
+        );
+      }
+    }
+
+    this.fluent.bundles = bundles;
+    this.fluent.locale = this.locales;
+  }
 }
 
 async function loadAndCreateFluentVue() {
-  let chosenLocale = localStorage.getItem("chosenLocale");
-  if (chosenLocale == null) {
-    chosenLocale = navigator.languages;
-  } else {
-    chosenLocale = [chosenLocale];
-  }
-  const locales = getLocalesToLoad(chosenLocale);
-  const bundles = await loadAndCreateBundles(locales);
+  const manager = new FluentManager();
+  await manager.init();
 
-  return createFluentVue({
-    locale: locales,
-    bundles: bundles
-  });
+  return {
+    fluent: manager.fluent,
+    localePlugin: manager.plugin
+  };
 }
 
-function localePlugin(fluent) {
+function localePlugin(manager) {
   return {
     install(vue) {
       vue.prototype.$locale = {
         get current() {
-          return fluent.locale[0];
+          return manager.currentLocale;
         },
         set current(newLocale) {
           this.setCurrent(newLocale);
         },
         async setCurrent(newLocale) {
-          const locales = getLocalesToLoad([newLocale]);
-          const bundles = await loadAndCreateBundles(locales);
-          localStorage.setItem("chosenLocale", newLocale);
-          fluent.bundles = bundles;
-          fluent.locale = locales;
+          return await manager.changeLocale(newLocale);
         },
         get supported() {
           return SUPPORTED_LOCALES.slice();
@@ -109,4 +184,4 @@ function localePlugin(fluent) {
   };
 }
 
-export { loadAndCreateFluentVue, localePlugin };
+export { loadAndCreateFluentVue };

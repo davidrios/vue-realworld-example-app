@@ -1,10 +1,8 @@
 module.exports = {
-  chainWebpack: config => {
-    config.module
-      .rule()
-      .test(/\.ftl$/)
-      .use("raw-loader")
-      .loader("raw-loader")
-      .end();
+  configureWebpack: config => {
+    config.module.rules.push({
+      test: /\.ftl$/,
+      use: ["@davidrios/hot-reloader", "file-loader"]
+    });
   }
 };
