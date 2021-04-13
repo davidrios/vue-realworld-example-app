@@ -784,6 +784,11 @@
   resolved "https://registry.yarnpkg.com/@fluent/sequence/-/sequence-0.6.0.tgz#6642c2896125fe618df20a3a66dc860d622b720c"
   integrity sha512-U9GRc4GR3IIO58RRfa+Mo9OMKJ3c/R+1lBQ3LWulBVF6BIfzVh50h0uKqsss8pyVqsaMowTVChK8aus+d8ke4g==
 
+"@fluent/syntax@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@fluent/syntax/-/syntax-0.17.0.tgz#3e6385c44bda2a44a68b83a1efbadc1a134e9805"
+  integrity sha512-fgJNUZRBk/n5MO5AxZ7Vvv8aCzMF6NanGBS1GFR2HG2lnsGqHLAe9OeHpyg+FkKfP5SvOtbyk3Nkza5iIwN/Ug==
+
 "@hapi/address@2.x.x":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.0.0.tgz#9f05469c88cb2fd3dcd624776b54ee95c312126a"

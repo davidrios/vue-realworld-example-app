@@ -20,6 +20,7 @@
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
     "@davidrios/hot-reloader": "^1.0.1",
+    "@fluent/syntax": "^0.17.0",
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-plugin-eslint": "^3.10.0",
     "@vue/cli-plugin-pwa": "^3.10.0",
@@ -55,7 +56,8 @@
     "build": "cross-env BABEL_ENV=dev vue-cli-service build",
     "lint": "vue-cli-service lint",
     "serve": "cross-env BABEL_ENV=dev vue-cli-service serve",
-    "test": "cross-env BABEL_ENV=test jest --coverage"
+    "test": "cross-env BABEL_ENV=test jest --coverage",
+    "update-catalog": "node scripts/update-catalog.js"
   },
   "version": "0.1.0"
 }
