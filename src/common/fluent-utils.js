@@ -181,6 +181,9 @@ function localePlugin(manager) {
         },
         get supported() {
           return SUPPORTED_LOCALES.slice();
+        },
+        parseDate(isoDate) {
+          return new Date(isoDate);
         }
       };
     }

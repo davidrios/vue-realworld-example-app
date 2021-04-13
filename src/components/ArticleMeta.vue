@@ -12,7 +12,9 @@
       >
         {{ article.author.username }}
       </router-link>
-      <span class="date">{{ article.createdAt | date }}</span>
+      <span class="date">{{
+        $t("long-date", { date: $locale.parseDate(article.createdAt) })
+      }}</span>
     </div>
     <rwv-article-actions
       v-if="actions"

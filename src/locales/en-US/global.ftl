@@ -71,6 +71,8 @@ sign-in-up-to-add-comments =
   .sign-in-label = Sign in
   .sign-up-label = sign up
 
+long-date = { DATETIME($date, month: "long", year: "numeric", day: "numeric") }
+
 
 ## Backend errors
 
